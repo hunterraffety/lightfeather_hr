@@ -1,0 +1,34 @@
+{
+  "name": "lightfeather_be",
+  "version": "1.0.0",
+  "description": "backend",
+  "main": "index.js",
+  "scripts": {
+    "server": "nodemon index.js",
+    "test": "cross-env DB_ENV=development jest --watch",
+    "start": "node index.js",
+    "format": "prettier --write \"**/*.{js,scss,css,html,json,md,less,tsx}\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hunterraffety/lightfeather_hr.git"
+  },
+  "author": "Hunter Raffety",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/hunterraffety/lightfeather_hr/issues"
+  },
+  "homepage": "https://github.com/hunterraffety/lightfeather_hr/Backend-HR#readme",
+  "dependencies": {
+    "body-parser": "^1.20.0",
+    "cors": "^2.8.5",
+    "cross-env": "^7.0.3",
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "helmet": "^5.1.0",
+    "jest": "^28.1.1",
+    "knex": "^2.1.0",
+    "pg": "^8.7.3",
+    "sqlite3": "^5.0.8"
+  }
+}
