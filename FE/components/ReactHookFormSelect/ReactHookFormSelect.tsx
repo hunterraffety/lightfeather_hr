@@ -1,32 +1,54 @@
-import { MenuItem, Select } from '@mui/material'
+import { FormControl, InputLabel, MenuItem, Select } from '@mui/material'
+import { supervisor } from '../../lib/types/userType'
+import { orderBy } from 'lodash'
+import { FC } from 'react'
+import { FormInputProps } from '../../lib/types/formInputProps'
+import { Controller } from 'react-hook-form'
 import { COPY } from '../../lib/constants'
 
-interface ReactHookFormSelectProps {
-  label: string
-  name: string
-  placeholder: string
-}
+const ReactHookFormSelect: FC<FormInputProps> = ({
+  name,
+  control,
+  supervisors,
+}) => {
+  const sortedSupervisors = orderBy(
+    supervisors,
+    ['jurisdiction', 'lastName', 'firstName'],
+    ['asc']
+  )
 
-const ReactHookFormSelect = (props: ReactHookFormSelectProps) => {
-  const { label, name, placeholder } = props
-  return (
-    <>
-      <Select
-        labelId="demo-simple-select-helper-label"
-        id="demo-simple-select-helper"
-        // value={age}
-        defaultValue={placeholder}
-        label="Age"
-        // onChange={handleChange}
-      >
-        <MenuItem value="">
-          <em>{COPY.SELECT}</em>
+  const generateSupervisors = () => {
+    return sortedSupervisors.map((supervisor: supervisor) => {
+      return (
+        <MenuItem
+          key={supervisor.identificationNumber}
+          value={supervisor.identificationNumber}
+        >
+          {`${supervisor.jurisdiction} - ${supervisor.lastName}, ${supervisor.firstName}`}
         </MenuItem>
-        <MenuItem value={10}>Ten</MenuItem>
-        <MenuItem value={20}>Twenty</MenuItem>
-        <MenuItem value={30}>Thirty</MenuItem>
-      </Select>
-    </>
+      )
+    })
+  }
+
+  return (
+    <FormControl fullWidth>
+      <p>{COPY.SUPERVISOR}</p>
+      <Controller
+        render={({ field: { onChange, value } }) => (
+          <Select
+            onChange={onChange}
+            value={value}
+            variant="standard"
+            displayEmpty
+            renderValue={value !== '' ? undefined : () => COPY.SELECT}
+          >
+            {generateSupervisors()}
+          </Select>
+        )}
+        control={control}
+        name={name}
+      />
+    </FormControl>
   )
 }
 

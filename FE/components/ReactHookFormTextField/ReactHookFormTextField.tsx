@@ -1,22 +1,28 @@
 import { TextField } from '@mui/material'
-import React from 'react'
+import { Controller } from 'react-hook-form'
+import { FormInputProps } from '../../lib/types/formInputProps'
+import styles from './ReactHookFormTextField.module.scss'
 
-interface ReactHookFormTextFieldProps {
-  label: string
-  name: string
-}
-
-const ReactHookFormTextField = (props: ReactHookFormTextFieldProps) => {
-  const { label, name } = props
+const ReactHookFormTextField = ({ name, control, label }: FormInputProps) => {
   return (
-    <>
-      <TextField
-        id="outlined-basic"
-        label={label}
-        variant="outlined"
-        name={name}
-      />
-    </>
+    <Controller
+      name={name}
+      control={control}
+      render={({
+        field: { onChange, value },
+        fieldState: { error },
+        formState,
+      }) => (
+        <TextField
+          helperText={error ? error.message : null}
+          error={!!error}
+          onChange={onChange}
+          label={label}
+          variant="standard"
+          className={styles.textInput}
+        />
+      )}
+    />
   )
 }
 

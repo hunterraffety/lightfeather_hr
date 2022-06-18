@@ -1,3 +1,7 @@
 .navbar {
   @apply bg-slate-700 font-bold text-3xl flex flex-col items-center justify-center m-0 p-0;
+  span {
+    color: white;
+    padding: 0.3rem;
+  }
 }

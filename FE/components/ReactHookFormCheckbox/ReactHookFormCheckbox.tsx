@@ -1,7 +1,7 @@
 import { Checkbox } from '@mui/material'
 
 interface ReactHookFormCheckboxProps {
-  label: string
+  label?: string
   name: string
 }
 
