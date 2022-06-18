@@ -8,21 +8,28 @@ import ReactHookFormSelect from '../components/ReactHookFormSelect/ReactHookForm
 import { useGreeting } from '../lib/hooks'
 import { getUsers } from '../lib/api/getUsers'
 import { supervisor, user } from '../lib/types/userType'
-import { useEffect, useState } from 'react'
+import { useCallback, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useYupResolver, validationSchema } from '../lib/hooks/useYupResolver'
 import { createUser } from '../lib/api/createUser'
 import toast, { Toaster } from 'react-hot-toast'
+import { useRouter } from 'next/router'
 
 interface SupervisorProps {
   supervisors: supervisor[]
 }
 
 const Home = (props: SupervisorProps) => {
+  // supervisors from getstaticprops
   const { supervisors } = props
+  // resolver hook for yup
   const resolver = useYupResolver(validationSchema)
+  // useGreeting hook
   const hello = useGreeting()
+  // stick those dudes in state
   const [supervisorList] = useState<supervisor[]>(supervisors)
+
+  // set defaults for form
   const defaultValues = {
     firstName: '',
     lastName: '',
@@ -31,38 +38,37 @@ const Home = (props: SupervisorProps) => {
     supervisor: '',
   }
 
-  const methods = useForm<supervisor>({
+  // router access
+  const router = useRouter()
+
+  // pull methods to pass as controls to form
+  const methods = useForm<user>({
     defaultValues,
     resolver: resolver,
     reValidateMode: 'onChange',
   })
 
-  const [success, setSuccess] = useState<boolean>(false)
+  // destructure what i neeeeeed
+  const { handleSubmit, control } = methods
 
-  useEffect(() => {
-    if (success === true) {
-      reset()
-    }
-  }, [success])
-
-  const { handleSubmit, reset, control } = methods
-
-  const onError = () => {
-    setSuccess(false)
+  // sir, certainly you can see you've made an error
+  const onError = useCallback(() => {
     toast.error(COPY.ALL_FIELDS_REQUIRED)
-  }
+  }, [])
 
-  const onSubmit = (data: supervisor) => {
-    setSuccess(true)
-    toast.success(COPY.USER_CREATED)
+  // if successful, redirect to show users, passing validations and on the backend as well
+  const onSubmit = useCallback((data: user) => {
     createUser(data as any)
+    toast.success(COPY.USER_CREATED)
+    router.push('/showUsers')
     console.log(data, 'data for successful post')
-  }
+  }, [])
 
+  // buncha sick code:
   return (
     <>
       <div>
-        <Toaster />
+        <Toaster position="bottom-right" />
       </div>
       <Navbar greeting={hello} />
       <div className={styles.contentContainer}>
@@ -134,14 +140,6 @@ const Home = (props: SupervisorProps) => {
             >
               {COPY.SUBMIT}
             </Button>
-            <Button
-              variant="contained"
-              color="primary"
-              className={styles.btn}
-              onClick={() => reset({})}
-            >
-              {COPY.SUBMIT}
-            </Button>
           </div>
         </form>
       </div>
@@ -150,6 +148,10 @@ const Home = (props: SupervisorProps) => {
 }
 
 export default Home
+
+/* 
+the return values are just a bunch of components that are wrapped to enable validations through rhf on top of material ui jazzzzzz
+*/
 
 export async function getStaticProps() {
   const supervisors = await getUsers()

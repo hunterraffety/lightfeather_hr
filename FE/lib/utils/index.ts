@@ -1,3 +1,4 @@
+// sets up base url for api calls
 export const configureBaseUrl = (stage: string, localApiPort = 3300) => {
   let baseUrl = ''
 

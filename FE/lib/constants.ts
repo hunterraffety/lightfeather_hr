@@ -1,3 +1,5 @@
+// no one likes to misspell constants
+
 export const COPY = {
   ALL_FIELDS_REQUIRED: 'Ensure all fields are filled out',
   EMAIL: 'Email',

@@ -6,17 +6,21 @@ import { FormInputProps } from '../../lib/types/formInputProps'
 import { Controller } from 'react-hook-form'
 import { COPY } from '../../lib/constants'
 
+// wrapper component to grab and populate select values
+
 const ReactHookFormSelect: FC<FormInputProps> = ({
   name,
   control,
   supervisors,
 }) => {
+  // sorting the supervisors because you said so
   const sortedSupervisors = orderBy(
     supervisors,
     ['jurisdiction', 'lastName', 'firstName'],
     ['asc']
   )
 
+  // function to generate our dudes and populate dropdown -- imagine if i could do this with money in my bank account. give me a job!
   const generateSupervisors = () => {
     return sortedSupervisors.map((supervisor: supervisor) => {
       return (
@@ -42,6 +46,7 @@ const ReactHookFormSelect: FC<FormInputProps> = ({
             displayEmpty
             renderValue={value !== '' ? undefined : () => COPY.SELECT}
           >
+            {/* see this is where that money stuff would be handy */}
             {generateSupervisors()}
           </Select>
         )}

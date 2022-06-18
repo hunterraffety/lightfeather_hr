@@ -1,0 +1,27 @@
+.userContainer {
+  @apply flex flex-col items-center justify-center m-0 p-0;
+  .firstName {
+    @apply text-black;
+  }
+  .supervisorProfile {
+    display: flex;
+    padding: 1rem;
+    width: 40%;
+    border: 1px solid black;
+    margin: 1rem;
+    min-height: 10vh;
+    @apply rounded-md;
+    > span {
+      padding: 1rem;
+      @apply text-red-200;
+    }
+  }
+}
+
+.bio {
+  margin: 1rem;
+}
+
+.photo {
+  margin: 1rem;
+}

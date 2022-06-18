@@ -14,3 +14,5 @@ export type supervisor = {
   firstName: string
   lastName: string
 }
+
+// whoops misplaced some types over here too.

@@ -7,3 +7,5 @@ export interface FormInputProps {
   setValue?: any
   supervisors?: supervisor[]
 }
+
+// i probably could have put more interfaces and types in here
