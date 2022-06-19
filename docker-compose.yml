@@ -1,0 +1,28 @@
+version: '3.7'
+
+services:
+  api:
+    container_name: server
+    restart: always
+    build:
+      context: .
+      dockerfile: ./server/Dockerfile
+    ports:
+      - '3300:3300'
+    depends_on:
+      - client
+  client:
+    container_name: client
+    build:
+      context: .
+      dockerfile: ./client/Dockerfile
+    volumes:
+      - '.:/client'
+      - '/client/node_modules'
+    ports:
+      - 3000:3000
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    stdin_open: true
+    depends_on:
+      - api
