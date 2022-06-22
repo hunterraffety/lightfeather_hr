@@ -1,28 +1,40 @@
 version: '3.7'
 
 services:
-  server:
-    container_name: server
+  # proxies connections to the client/server portion
+  # this would (down the line) allow you to scale up by
+  # adding more upstreams and letting nginx do load balancing
+  proxy:
+    image: nginx:1.23.0-alpine
+    container_name: proxy
     restart: always
-    build:
-      context: .
-      dockerfile: ./server/Dockerfile
     ports:
-      - '3300:3300'
-    depends_on:
-      - client
-  client:
-    container_name: client
-    build:
-      context: .
-      dockerfile: ./client/Dockerfile
+      # in production, you'd use SSL but we're less bothered
+      - 80:80
     volumes:
-      - '.:/client'
-      - '/client/node_modules'
-    ports:
-      - 3000:3000
-    environment:
-      - CHOKIDAR_USEPOLLING=true
-    stdin_open: true
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
     depends_on:
       - server
+      - client
+
+  server:
+    image: hunter/lightfeather-server:latest
+    container_name: lightfeather-server
+    restart: always
+    build:
+      context: ./server
+    environment:
+      - PORT=80
+    expose:
+      - 80
+
+  client:
+    image: hunter/lightfeather-client:latest
+    container_name: lightfeather-client
+    restart: always
+    build:
+      context: ./client
+    environment:
+      - PORT=80
+    expose:
+      - 80

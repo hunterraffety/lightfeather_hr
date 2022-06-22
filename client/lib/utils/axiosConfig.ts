@@ -4,9 +4,11 @@ import axios from 'axios'
 // need endpoint infozzzz
 import { configureBaseUrl } from '../utils'
 
+const port = Number(process.env.PORT) || 80
+
 // generates axios config for the given request in addition to the base config and handling errors with interceptors
 const axiosConfig = {
-  baseURL: configureBaseUrl('development', 3300),
+  baseURL: configureBaseUrl('development', port),
 }
 
 export const request = () => {
