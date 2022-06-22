@@ -1,11 +1,16 @@
-FROM node:18-bullseye-slim
+FROM node:18.4-alpine3.16 as dependencies
+WORKDIR /deps
+COPY package-lock.json .
+COPY package.json .
+RUN npm install
 
-EXPOSE 8080
-# WORKDIR /home/node
-WORKDIR /server
+FROM node:18.4-alpine3.16
+WORKDIR /app
+# get the deps from the earlier stage
+COPY --from=dependencies /deps/node_modules node_modules
+# copy the sources in
+COPY . .
 
-COPY * ./
-CMD ["npm", "install"]
-
-COPY *.js .
-ENTRYPOINT ["node", "index.js"]
+EXPOSE 80
+ENV PORT=80
+CMD [ "npm", "run", "start" ]
