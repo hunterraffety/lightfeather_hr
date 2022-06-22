@@ -1,13 +1,11 @@
-# pull official base image
-FROM node:14.16.0-alpine
+FROM node:18-bullseye-slim
 
+EXPOSE 8080
+# WORKDIR /home/node
 WORKDIR /server
 
-COPY package*.json ./server
-RUN npm install
+COPY * ./
+CMD ["npm", "install"]
 
-COPY . ./server
-
-EXPOSE 8081
-
-CMD ["node", "index.js"]
+COPY *.js .
+ENTRYPOINT ["node", "index.js"]
